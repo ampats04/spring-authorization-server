@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(java *)",
+      "Bash(./gradlew bootRun --args='--spring.profiles.active=local')",
+      "Bash(echo \"PID: $!\")",
+      "Bash(gradle -version)",
+      "Bash(/Users/ampats11/.gradle/wrapper/dists/gradle-8.13-bin/5xuhj0ry160q40clulazy9h7d/gradle-8.13/bin/gradle bootJar)",
+      "Bash(curl -s -X POST http://localhost:8080/oauth2/token -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&client_id=service-a&client_secret=secret-for-service-a')",
+      "Bash(python3 -m json.tool)",
+      "Bash(curl -s http://localhost:8080/.well-known/jwks.json)",
+      "Bash(curl -s http://localhost:8080/actuator/health)",
+      "Bash(curl -s -X POST http://localhost:8080/oauth2/token -H 'Content-Type: application/json' -d '{\"clientId\":\"service-a\",\"clientSecret\":\"secret-for-service-a\",\"accountNumber\":\"ACC-12345\"}')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080/actuator/health)"
+    ]
+  }
+}
