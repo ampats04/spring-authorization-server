@@ -1,6 +1,7 @@
 package com.company.authserver.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
@@ -13,6 +14,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class JwtService {
@@ -25,10 +27,11 @@ public class JwtService {
     @Value("${app.jwt.audience}")
     private String audience;
 
-    @Value("${app.jwt.expiry-seconds:900}")
+    @Value("${app.jwt.expiry-seconds:3600}")
     private long expirySeconds;
 
     public String generateToken(String clientId, String accountNumber) {
+        log.debug("Generating JWT for client: {}", clientId);
         Instant now = Instant.now();
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
@@ -36,10 +39,8 @@ public class JwtService {
                 .subject(clientId)
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expirySeconds))
-                .audience(List.of(audience))          // tip 8.1: always set aud
+                .audience(List.of(audience))
                 .claim("client_id", clientId)
-                // tip 8.5: account_number is in the payload; replace with an opaque
-                // internal ref ID in production if this value is sensitive
                 .claim("account_number", accountNumber)
                 .id(UUID.randomUUID().toString())
                 .build();

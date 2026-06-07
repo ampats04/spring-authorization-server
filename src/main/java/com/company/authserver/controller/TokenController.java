@@ -9,6 +9,7 @@ import com.company.authserver.service.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.Instant;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/oauth2")
 @RequiredArgsConstructor
@@ -33,6 +35,7 @@ public class TokenController {
                                                HttpServletRequest http) {
         String correlationId = UUID.randomUUID().toString();
         String sourceIp = resolveSourceIp(http);
+        log.debug("Token request received — clientId: {}, correlationId: {}", request.clientId(), correlationId);
 
         try {
             authService.authenticate(request.clientId(), request.clientSecret());

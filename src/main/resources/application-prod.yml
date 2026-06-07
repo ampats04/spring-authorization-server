@@ -1,0 +1,28 @@
+# ─── PROD PROFILE ─────────────────────────────────────────────────────────────
+# All values must be injected via environment variables — no defaults.
+# Secrets stored in Key Vault must be BCrypt-encoded (e.g. {bcrypt}$2a$12$...).
+#
+# RBAC required on the managed identity / service principal:
+#   Key Vault Secrets User  → for SecretClient
+#   Key Vault Crypto User   → for CryptographyClient
+#
+# Required environment variables:
+#   APP_JWT_ISSUER, APP_JWT_AUDIENCE, APP_JWT_EXPIRY_SECONDS
+#   AZURE_VAULT_URL, AZURE_SIGNING_KEY_SECRET_NAME, AZURE_SIGNING_PUBLIC_KEY_SECRET_NAME
+#   AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID
+#
+# Activate: SPRING_PROFILES_ACTIVE=prod
+logging:
+  level:
+    root: WARN
+    com.company.authserver: WARN
+
+app:
+  azure:
+    vault-url: ${AZURE_VAULT_URL}
+    signing-key-secret-name: ${AZURE_SIGNING_KEY_SECRET_NAME}
+    signing-public-key-secret-name: ${AZURE_SIGNING_PUBLIC_KEY_SECRET_NAME}
+    credentials:
+      client-id: ${AZURE_CLIENT_ID}
+      client-secret: ${AZURE_CLIENT_SECRET}
+      tenant-id: ${AZURE_TENANT_ID}

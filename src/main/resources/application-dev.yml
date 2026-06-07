@@ -1,0 +1,15 @@
+# ─── DEV PROFILE ──────────────────────────────────────────────────────────────
+# Clients use an in-memory registry. Secrets use {noop} prefix (plain text).
+# Override any value by setting the corresponding environment variable.
+# To test: POST /oauth2/token with clientId=service-a, clientSecret=secret-for-service-a
+logging:
+  level:
+    root: INFO
+    com.company.authserver: DEBUG
+
+app:
+  clients:
+    - id: ${CLIENT_A_ID:service-a}
+      secret: ${CLIENT_A_SECRET:"{noop}secret-for-service-a"}
+    - id: ${CLIENT_B_ID:service-b}
+      secret: ${CLIENT_B_SECRET:"{noop}secret-for-service-b"}

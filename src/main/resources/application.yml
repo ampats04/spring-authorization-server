@@ -2,10 +2,10 @@ spring:
   application:
     name: oauth2-auth-server
   profiles:
-    active: local
+    active: dev
 
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
 
 management:
   endpoints:
@@ -16,48 +16,13 @@ management:
     health:
       show-details: always
 
+logging:
+  level:
+    root: INFO
+    com.company.authserver: INFO
+
 app:
   jwt:
-    issuer: https://auth.company.com
-    audience: https://api.company.com
-    expiry-seconds: 3600
-
----
-# ─── LOCAL PROFILE (default) ──────────────────────────────────────────────────
-# Uses an in-memory client registry. Secrets use {noop} prefix (plain text)
-# so no BCrypt hashing is needed during simulation.
-# To test: POST /oauth2/token with clientId=service-a, clientSecret=secret-for-service-a
-spring:
-  config:
-    activate:
-      on-profile: local
-
-app:
-  clients:
-    - id: service-a
-      secret: "{noop}secret-for-service-a"
-    - id: service-b
-      secret: "{noop}secret-for-service-b"
-
----
-# ─── AZURE PROFILE (production) ───────────────────────────────────────────────
-# Replace ALL dummy-* values with real Azure credentials before deploying.
-# Secrets stored in Key Vault must be BCrypt-encoded (e.g. {bcrypt}$2a$12$...).
-#
-# RBAC required on the managed identity / service principal:
-#   Key Vault Secrets User  → for SecretClient
-#   Key Vault Crypto User   → for CryptographyClient
-#
-# Activate:  SPRING_PROFILES_ACTIVE=azure  (or --spring.profiles.active=azure)
-spring:
-  config:
-    activate:
-      on-profile: azure
-
-app:
-  azure:
-    vault-url: https://dummy-vault.vault.azure.net/
-    client-id: 00000000-0000-0000-0000-000000000001
-    client-secret: dummy-client-secret-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-    tenant-id: 00000000-0000-0000-0000-000000000002
-    signing-key-id: https://dummy-vault.vault.azure.net/keys/oauth2-signing-key
+    issuer: ${APP_JWT_ISSUER:https://auth.company.com}
+    audience: ${APP_JWT_AUDIENCE:https://api.company.com}
+    expiry-seconds: ${APP_JWT_EXPIRY_SECONDS:3600}

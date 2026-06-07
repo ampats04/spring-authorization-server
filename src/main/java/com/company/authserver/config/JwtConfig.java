@@ -4,10 +4,10 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.proc.SecurityContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
@@ -24,10 +24,10 @@ import java.util.UUID;
  * from Azure Key Vault (CryptographyClient) when running with the 'azure' profile.
  * The JWKS endpoint /.well-known/jwks.json will serve the matching public key.
  */
+@Slf4j
 @Configuration
+@Profile("!prod")
 public class JwtConfig {
-
-    private static final Logger log = LoggerFactory.getLogger(JwtConfig.class);
 
     @Bean
     public RSAKey rsaKey() throws Exception {

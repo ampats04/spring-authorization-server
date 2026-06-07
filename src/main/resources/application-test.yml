@@ -1,0 +1,15 @@
+logging:
+  level:
+    root: WARN
+    com.company.authserver: INFO
+
+app:
+  jwt:
+    issuer: https://auth.test.local
+    audience: https://api.test.local
+    expiry-seconds: 300
+  clients:
+    - id: service-a
+      secret: "{noop}secret-for-service-a"
+    - id: service-b
+      secret: "{noop}secret-for-service-b"
